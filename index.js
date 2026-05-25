@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const multer = require('multer');
+const fs = require('fs');
 
 const db = require('./db');
 const authRoutes = require('./routes/auth');
@@ -15,7 +16,9 @@ const {
 } = require('./middleware/auth');
 
 const app = express();
-const PORTA = 3000;
+const PORTA = Number(process.env.PORT || 3000);
+const uploadsDir = path.join(__dirname, 'uploads');
+fs.mkdirSync(uploadsDir, { recursive: true });
 
 // Verificar se SESSION_SECRET está definido
 if (!process.env.SESSION_SECRET) {
@@ -42,19 +45,32 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, path.join(__dirname, 'uploads')),
-    filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
+    destination: (req, file, cb) => cb(null, uploadsDir),
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname).toLowerCase();
+        const baseName = path
+            .basename(file.originalname, ext)
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-zA-Z0-9_-]/g, '_')
+            .slice(0, 60);
+
+        cb(null, `${Date.now()}-${baseName}${ext}`);
+    }
 });
 
 const upload = multer({
     storage,
     limits: { fileSize: 10 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
-        if (file.mimetype === 'application/pdf') {
-            cb(null, true);
-        } else {
-            cb(new Error('Apenas arquivos PDF são permitidos.'));
+        const ext = path.extname(file.originalname).toLowerCase();
+        const isPdf = ext === '.pdf' && file.mimetype === 'application/pdf';
+
+        if (!isPdf) {
+            return cb(new Error('Arquivo inválido. Envie somente PDF. Arquivos .jpeg, .jpg, .png e outros formatos não são permitidos.'));
         }
+
+        cb(null, true);
     }
 });
 
@@ -63,6 +79,24 @@ const upload = multer({
 // =============================
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/health', async (req, res) => {
+    try {
+        await queryAsync('SELECT 1 AS ok');
+        res.json({
+            servidor: 'online',
+            banco: 'conectado',
+            horario_servidor: new Date().toISOString()
+        });
+    } catch (err) {
+        res.status(500).json({
+            servidor: 'online',
+            banco: 'erro',
+            codigo: err.code || 'ERRO_DB',
+            mensagem: 'Servidor abriu, mas não conseguiu conectar ao MySQL. Confira MySQL ligado, porta 3306 e .env.'
+        });
+    }
 });
 
 // =============================
@@ -500,6 +534,38 @@ app.get('/metricas', authMiddleware, coordinatorOnly, async (req, res) => {
 });
 
 // =============================
+// MÉTRICAS POR CURSO (TODOS OS CURSOS)
+// =============================
+app.get('/metricas-todos', authMiddleware, coordinatorOnly, async (req, res) => {
+    try {
+        const cursos = await queryAsync('SELECT id, nome FROM courses ORDER BY nome ASC');
+        
+        const metricasCursos = await Promise.all(
+            cursos.map(async (curso) => {
+                const alunos = (await queryAsync('SELECT COUNT(*) AS quantidade FROM students WHERE curso_id = ?', [curso.id]))[0].quantidade || 0;
+                const enviadas = (await queryAsync('SELECT COUNT(*) AS quantidade FROM submissions WHERE curso_id = ?', [curso.id]))[0].quantidade || 0;
+                const aprovadas = (await queryAsync('SELECT COUNT(*) AS quantidade FROM submissions WHERE curso_id = ? AND submission_status = ?', [curso.id, 'APPROVED']))[0].quantidade || 0;
+                const aprovacoesPercentual = enviadas ? Math.round((aprovadas / enviadas) * 100) : 0;
+
+                return {
+                    id: curso.id,
+                    nome: curso.nome,
+                    alunos,
+                    enviadas,
+                    aprovadas,
+                    aprovacoes_percentual: aprovacoesPercentual
+                };
+            })
+        );
+
+        res.json(metricasCursos);
+    } catch (err) {
+        console.error('Erro ao buscar métricas de todos os cursos:', err);
+        res.status(500).json({ msg: 'Erro ao buscar métricas.' });
+    }
+});
+
+// =============================
 // MEUS CURSOS
 // =============================
 app.get('/meus-cursos', authMiddleware, coordinatorOnly, (req, res) => {
@@ -699,14 +765,14 @@ app.patch('/atividades/:id/status', authMiddleware, coordinatorOnly, (req, res) 
             const needsStudentRevert = status === 'REJECTED' && currentStatus === 'APPROVED';
 
             const updateSubmission = () => {
-                const approvedValue = status === 'APPROVED' ? horas : 'NULL';
+                const approvedValue = status === 'APPROVED' ? horas : null;
                 const sql = `
                     UPDATE submissions
                     SET submission_status = ?,
-                        approved_hours = ${approvedValue}
+                        approved_hours = ?
                     WHERE submission_id = ?
                 `;
-                db.query(sql, [status, req.params.id], (err2) => {
+                db.query(sql, [status, approvedValue, req.params.id], (err2) => {
                     if (err2) return res.status(500).json(err2);
                     res.json({ msg: 'Status atualizado com sucesso!' });
                 });
@@ -744,6 +810,17 @@ app.get('/logout', (req, res) => {
     req.session.destroy(() => {
         res.redirect('/');
     });
+});
+
+// =============================
+// TRATAMENTO DE ERROS DE UPLOAD
+// =============================
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError || err.message?.includes('Arquivo inválido')) {
+        return res.status(400).json({ msg: err.message });
+    }
+
+    return next(err);
 });
 
 // =============================

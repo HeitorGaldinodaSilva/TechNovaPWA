@@ -295,41 +295,48 @@ async function validarAtividade(id, status) {
 }
 
 async function carregarMetricas() {
-    const grid = document.getElementById('metricasGrid');
+    const container = document.getElementById('metricasContainer');
     try {
-        const res = await fetch('/metricas');
+        const res = await fetch('/metricas-todos');
         if (!res.ok) throw new Error('Erro ao buscar métricas');
-        const data = await res.json();
+        const cursos = await res.json();
 
-        if (!data || Object.keys(data).length === 0) {
-            grid.innerHTML = '<div class="metric-card"><p>Nenhuma métrica disponível.</p></div>';
+        if (!cursos || cursos.length === 0) {
+            container.innerHTML = '<p>Nenhuma métrica disponível.</p>';
             return;
         }
 
-        const aprovacoesTexto = data.aprovacoes_percentual !== undefined
-            ? `${data.aprovacoes_percentual}%`
-            : '0%';
+        let htmlConteudo = '';
 
-        grid.innerHTML = `
-            <div class="metric-card">
-                <p>Curso</p>
-                <strong class="metric-value">${data.curso || '—'}</strong>
-            </div>
-            <div class="metric-card">
-                <p>Total de Alunos</p>
-                <strong class="metric-value">${data.alunos || 0}</strong>
-            </div>
-            <div class="metric-card">
-                <p>Atividades Enviadas</p>
-                <strong class="metric-value">${data.enviadas || 0}</strong>
-            </div>
-            <div class="metric-card">
-                <p>Aprovações</p>
-                <strong class="metric-value">${aprovacoesTexto}</strong>
-            </div>
-        `;
+        cursos.forEach(curso => {
+            const aprovacoes = curso.aprovacoes_percentual !== undefined
+                ? `${curso.aprovacoes_percentual}%`
+                : '0%';
+
+            htmlConteudo += `
+                <div class="metrics-course-section">
+                    <h3 class="metrics-course-title">${curso.nome}</h3>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <p>Total de Alunos</p>
+                            <strong class="metric-value">${curso.alunos}</strong>
+                        </div>
+                        <div class="metric-card">
+                            <p>Atividades Enviadas</p>
+                            <strong class="metric-value">${curso.enviadas}</strong>
+                        </div>
+                        <div class="metric-card">
+                            <p>Aprovações</p>
+                            <strong class="metric-value">${aprovacoes}</strong>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = htmlConteudo;
     } catch (err) {
-        grid.innerHTML = '<div class="metric-card"><p>Erro ao carregar métricas.</p></div>';
+        container.innerHTML = '<p>Erro ao carregar métricas.</p>';
         console.error(err);
     }
 }

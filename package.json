@@ -1,14 +1,17 @@
 {
   "name": "technova",
   "version": "1.0.0",
-  "description": "",
+  "description": "Projeto TechNova Faculdade - versão organizada para execução local",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node index.js",
+    "check": "node --check index.js",
+    "db:admin": "node scripts/criar-admin.js",
+    "db:test": "node scripts/testar-banco.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Equipe TechNova",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

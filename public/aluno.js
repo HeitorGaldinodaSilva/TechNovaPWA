@@ -126,6 +126,11 @@ async function enviarAtividade(event) {
         return alert('Preencha todos os campos e anexe o certificado em PDF.');
     }
 
+    const nomeArquivo = certificado.name.toLowerCase();
+    if (!nomeArquivo.endsWith('.pdf') || certificado.type !== 'application/pdf') {
+        return alert('Formato inválido. Envie somente PDF. Arquivos JPEG/JPG/PNG não são aceitos.');
+    }
+
     const formData = new FormData();
     formData.append('activity_title', titulo);
     formData.append('category', categoria);

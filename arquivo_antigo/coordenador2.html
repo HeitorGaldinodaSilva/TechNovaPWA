@@ -1,0 +1,212 @@
+ <!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+
+<!-- ESSENCIAL 📱 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tech Nova</title>
+
+<link rel="stylesheet" href="coordenador.css">
+
+</head>
+
+<body>
+
+<!-- BOTÃO MENU MOBILE -->
+<button class="menu-toggle" onclick="toggleMenu()">
+☰
+</button>
+
+<div class="sidebar" id="sidebar">
+
+<div class="logo">
+<img src="logo.png" alt="Technova">
+</div>
+
+<ul class="menu">
+
+<li onclick="mostrarSecao('cursos')">
+Meus cursos
+</li>
+
+<li onclick="mostrarSecao('alunos')">
+Alunos
+</li>
+
+<li>Atividades Pendentes</li>
+<li>Aprovar/Reprovar</li>
+<li>Métricas</li>
+<li>Notificações</li>
+<li>Sair</li>
+
+</ul>
+
+<div class="perfil">
+
+<img src="perfil.png" alt="perfil">
+
+<span id="tipoUsuario">
+coordenador
+</span>
+
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="topbar"></div>
+
+<div class="header">
+Bem-vindo ao AcadWeb
+</div>
+
+<div class="content">
+
+<!-- ALUNOS -->
+
+<div id="alunos" class="secao">
+
+<div class="container">
+
+<h2>Gerenciar alunos</h2>
+
+<div class="top-bar">
+
+<button class="btn-add" onclick="mostrarFormAluno()">
++ Adicionar Aluno
+</button>
+
+</div>
+
+<!-- FORM -->
+
+<div id="formAluno"
+style="display:none; margin-bottom:15px;">
+
+<input
+type="text"
+id="nomeAluno"
+placeholder="Nome">
+
+<input
+type="email"
+id="emailAluno"
+placeholder="E-mail">
+
+<input
+type="text"
+id="cursoAluno"
+placeholder="Curso">
+
+<button
+class="btn-add"
+onclick="cadastrarAluno()">
+
+Salvar
+
+</button>
+
+</div>
+
+<!-- TABELA RESPONSIVA -->
+
+<div class="table-wrapper">
+
+<table class="tabela-cursos">
+
+<thead>
+
+<tr>
+<th>Nome</th>
+<th>E-mail</th>
+<th>Curso</th>
+<th>Ações</th>
+</tr>
+
+</thead>
+
+<tbody id="listaAlunos"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+<span>
+© 2026 Qualinfo Tecnologia.
+Todos os direitos reservados.
+</span>
+
+<span>
+Qualinfo
+</span>
+
+</div>
+
+</div>
+
+<!-- SCRIPT MENU MOBILE -->
+
+<script>
+
+function toggleMenu() {
+
+document
+.getElementById("sidebar")
+.classList.toggle("active");
+
+}
+
+/* Seu JS original continua */
+
+function mostrarSecao(secaoId) {
+
+const secoes =
+document.querySelectorAll('.secao');
+
+secoes.forEach(secao =>
+secao.style.display = 'none'
+);
+
+document
+.getElementById(secaoId)
+.style.display = 'block';
+
+if (secaoId === 'alunos') {
+carregarAlunos();
+}
+
+}
+
+function mostrarFormAluno() {
+
+const form =
+document.getElementById("formAluno");
+
+form.style.display =
+form.style.display === "none"
+? "block"
+: "none";
+
+}
+
+window.onload =
+() => mostrarSecao('alunos');
+
+</script>
+
+</body>
+
+</html>

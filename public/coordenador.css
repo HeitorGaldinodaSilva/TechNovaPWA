@@ -215,9 +215,47 @@ header {
 .avatar-blue { background: #eef2ff; color: #4f46e5; }
 
 /* MÉTRICAS */
+.metrics-header {
+    margin-bottom: 40px;
+}
+
+.metrics-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+.metrics-subtitle {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.metrics-por-curso-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.metrics-course-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.metrics-course-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent);
+    padding-left: 4px;
+    border-left: 4px solid var(--accent);
+}
+
 .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
 
@@ -281,4 +319,29 @@ header {
 .notification-card-time {
     font-size: 13px;
     color: #94a3b8;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 1200px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metrics-title {
+        font-size: 22px;
+    }
+
+    .metrics-subtitle {
+        font-size: 14px;
+    }
+
+    .metric-value {
+        font-size: 2rem;
+    }
 }
