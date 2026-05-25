@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AcadWeb - Aluno</title>
+    <link rel="stylesheet" href="aluno.css">
+</head>
+<body>
+    <aside>
+        <div class="logo-area">
+            <img src="logo.png" class="logotipo" alt="Logo">
+        </div>
+        <nav>
+            <div class="nav-item" onclick="mostrarSecao('visaoGeral')">Visão Geral</div>
+            <div class="nav-item" onclick="mostrarSecao('enviarAtividade')">Enviar Atividade</div>
+            <div class="nav-item" onclick="mostrarSecao('minhasAtividades')">Minhas Atividades</div>
+            <div class="nav-item" onclick="mostrarSecao('detalhesAtividades')">Detalhes de Atividades</div>
+            <div class="nav-item" onclick="mostrarSecao('progressoCategorias')">Progresso por Categoria</div>
+            <div class="nav-item" onclick="mostrarSecao('fluxoAluno')">Fluxo do Aluno</div>
+            <div class="nav-item" onclick="mostrarSecao('notificacoes')">Notificações</div>
+            <div class="nav-sair" onclick="window.location.href='/logout'">
+                <img src="sair.png" class="logosair" alt="Sair"> Sair
+            </div>
+        </nav>
+    </aside>
+
+    <main>
+        <header>
+            <div class="header-content">
+                <h1>Painel do Aluno</h1>
+            </div>
+        </header>
+
+        <section id="visaoGeral" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Visão Geral</h1>
+            </div>
+            <div class="cards-row">
+                <div class="metric-card">
+                    <p>Horas Concluídas</p>
+                    <strong id="horasConcluidas">0h</strong>
+                </div>
+                <div class="metric-card">
+                    <p>Meta de Horas</p>
+                    <strong id="metaHoras">0h</strong>
+                </div>
+                <div class="metric-card">
+                    <p>Seu progresso</p>
+                    <strong id="percentualProgresso">0%</strong>
+                </div>
+            </div>
+
+            <div class="progress-panel">
+                <div class="progress-heading">
+                    <span>Seu progresso geral</span>
+                    <span id="progressLabel">0/0h</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="widget white-card">
+                    <h2>Minhas atividades recentes</h2>
+                    <div id="atividadesRecentes" class="recent-list">Carregando...</div>
+                </div>
+                <div class="widget white-card">
+                    <h2>Progresso por categoria</h2>
+                    <div id="progressoCategorias" class="category-list">Carregando...</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="enviarAtividade" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Enviar Atividade</h1>
+            </div>
+            <div class="white-card form-card">
+                <p>Preencha os dados da atividade realizada para validação do coordenador.</p>
+                <form id="formAtividade" onsubmit="enviarAtividade(event)">
+                    <div class="form-grid">
+                        <label>
+                            Nome da Atividade
+                            <input type="text" id="tituloAtividade" placeholder="Ex: Curso Avançado de Python" required>
+                        </label>
+                        <label>
+                            Categorias
+                            <input type="text" id="categoriaAtividade" placeholder="Ex: Evento, Monitoria" required>
+                        </label>
+                        <label>
+                            Horas
+                            <input type="number" id="horasAtividade" placeholder="20" min="1" required>
+                        </label>
+                        <label>
+                            Data de Realização
+                            <input type="date" id="dataAtividade" required>
+                        </label>
+                        <label class="file-upload">
+                            Certificado (PDF)
+                            <input type="file" id="certificadoAtividade" accept="application/pdf" required>
+                        </label>
+                    </div>
+                    <button class="btn-primary" type="submit">Enviar para avaliação</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="minhasAtividades" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Minhas Atividades</h1>
+            </div>
+            <div class="table-container">
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th>Atividade</th>
+                            <th>Categoria</th>
+                            <th>Horas</th>
+                            <th>Status</th>
+                            <th>Enviado em</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaMinhasAtividades">
+                        <tr><td colspan="6">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="detalhesAtividades" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Detalhes de Atividade</h1>
+                <p class="section-note">Veja a atividade completa e o arquivo anexado.</p>
+            </div>
+            <div id="detalhesContainer" class="white-card detalhes-card">
+                <div id="detalhesVazio" class="detail-message">
+                    <p>Selecione uma atividade em <strong>Minhas Atividades</strong> para ver mais detalhes.</p>
+                </div>
+                <div id="detalhesAtividade" class="detail-grid" style="display:none;">
+                    <div class="detail-box">
+                        <h2>Informações da Atividade</h2>
+                        <div class="detail-row"><strong>Nome:</strong> <span id="detalheTitulo">-</span></div>
+                        <div class="detail-row"><strong>Categoria:</strong> <span id="detalheCategoria">-</span></div>
+                        <div class="detail-row"><strong>Horas:</strong> <span id="detalheHoras">-</span></div>
+                        <div class="detail-row"><strong>Data de realização:</strong> <span id="detalheData">-</span></div>
+                        <div class="detail-row"><strong>Status:</strong> <span id="detalheStatus">-</span></div>
+                        <div class="detail-row"><strong>Enviado em:</strong> <span id="detalheEnviado">-</span></div>
+                    </div>
+                    <div class="detail-box">
+                        <h2>Certificado Enviado</h2>
+                        <div id="certificadoAnexo" class="certificado-card">Nenhum certificado anexado.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="progressoCategorias" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Progresso por Categoria</h1>
+                <p class="section-note">Acompanhe seu avanço por tipo de atividade.</p>
+            </div>
+            <div class="white-card">
+                <div id="progressoCategoriasDetalhes" class="category-list">Carregando...</div>
+            </div>
+        </section>
+
+        <section id="fluxoAluno" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Fluxo do Aluno</h1>
+                <p class="section-note">Entenda as etapas do seu percurso até a certificação.</p>
+            </div>
+            <div class="flow-list">
+                <div class="flow-step">
+                    <div class="flow-step-number">1</div>
+                    <div>
+                        <h3>Enviar Atividades</h3>
+                        <p>Preencha os dados e anexe o certificado para análise do coordenador.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">2</div>
+                    <div>
+                        <h3>Em Análise</h3>
+                        <p>A coordenação avalia sua atividade e o comprovante enviado.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">3</div>
+                    <div>
+                        <h3>Aprovação</h3>
+                        <p>Se estiver correta, sua atividade será aprovada e as horas validadas.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">4</div>
+                    <div>
+                        <h3>Horas Validadas</h3>
+                        <p>As horas serão contabilizadas no seu progresso total.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-step-number">5</div>
+                    <div>
+                        <h3>Certificação</h3>
+                        <p>Ao completar a meta de horas, você avança no caminho da certificação.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="notificacoes" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Notificações</h1>
+            </div>
+            <div class="white-card">
+                <div id="listaNotificacoesAluno" class="notification-list"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="aluno.js"></script>
+</body>
+</html>

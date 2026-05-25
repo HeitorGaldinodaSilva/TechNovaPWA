@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AcadWeb - Coordenador</title>
+    <link rel="stylesheet" href="coordenador.css">
+</head>
+<body>
+
+    <aside>
+        <div class="logo-area">
+            <img src="logo.png" class="logotipo" alt="Logo">
+        </div>
+        <nav>
+            <div class="nav-item" onclick="mostrarSecao('meusCursos')">Meus Cursos</div>
+            <div class="nav-item" onclick="mostrarSecao('alunos')">Gerenciar Alunos</div>
+            <div class="nav-item" onclick="mostrarSecao('atividades')">Atividades</div>
+            <div class="nav-item" onclick="mostrarSecao('validacao')">Validação de Atividades</div>
+            <div class="nav-item" onclick="mostrarSecao('metricas')">Métricas</div>
+            <div class="nav-item" onclick="mostrarSecao('notificacoes')">Notificações</div>
+            <div class="nav-sair" onclick="window.location.href='/logout'">
+                <img src="sair.png" class="logosair" alt="Sair"> Sair
+            </div>
+        </nav>
+    </aside>
+
+    <main>
+        <header>
+            <div class="header-content">
+                <h1>Painel do Coordenador — AcadWeb</h1>
+            </div>
+        </header>
+
+        <!-- MEUS CURSOS -->
+        <section id="meusCursos" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Meus Cursos</h1>
+            </div>
+            <div class="table-container">
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th>Curso</th>
+                            <th>Carga Horária</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaMeusCursos">
+                        <tr><td colspan="3">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- GERENCIAR ALUNOS -->
+        <section id="alunos" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Gerenciar Alunos</h1>
+                <button class="btn-primary" onclick="mostrarFormAluno()">+ Cadastrar Novo Aluno</button>
+            </div>
+
+            <div id="formAluno" style="display:none; background:white; padding:20px; border-radius:15px; margin-bottom:20px; border:1px solid #e2e8f0;">
+                <div class="filters-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 0.5fr;">
+                    <input type="text"     id="nomeAluno"  placeholder="Nome completo"    class="filter-input">
+                    <input type="email"    id="emailAluno" placeholder="E-mail"            class="filter-input">
+                    <input type="password" id="senhaAluno" placeholder="Senha"             class="filter-input">
+                    <select                id="cursoAluno" class="filter-input">
+                        <option value="">Selecione o Curso...</option>
+                    </select>
+                    <input type="number"   id="horasAluno" placeholder="Horas adquiridas" class="filter-input" min="0">
+                    <button class="btn-primary" onclick="cadastrarAluno()">Salvar</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Curso</th>
+                            <th>Horas Adquiridas</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaAlunos">
+                        <tr><td colspan="5">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ATIVIDADES -->
+        <section id="atividades" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Atividades</h1>
+            </div>
+            <div class="table-container">
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Aluno</th>
+                            <th>Atividade</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaAtividades">
+                        <tr><td colspan="5">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- VALIDACAO -->
+        <section id="validacao" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Validação de Atividades</h1>
+            </div>
+            <div class="table-container">
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Atividade</th>
+                            <th>Data</th>
+                            <th>Horas</th>
+                            <th>Certificado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaValidacao">
+                        <tr><td colspan="6">Carregando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- MÉTRICAS -->
+        <section id="metricas" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Métricas</h1>
+            </div>
+            <div class="table-container">
+                <div class="metrics-grid" id="metricasGrid">
+                    <div class="metric-card">
+                        <p>Carregando métricas...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NOTIFICAÇÕES -->
+        <section id="notificacoes" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Notificações</h1>
+            </div>
+            <div class="white-card">
+                <div id="listaNotificacoesCoordenador" class="notification-list"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="coordenador.js"></script>
+</body>
+</html>

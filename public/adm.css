@@ -1,0 +1,209 @@
+:root {
+    --primary-gradient: linear-gradient(90deg, #182750, #211e5e);
+    --bg-body: #f8fafc;
+    --white: #ffffff;
+    --text-main: #1e293b;
+    --text-light: #64748b;
+    --accent: #4f46e5;
+    --soft-purple: #f1f0ff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+}
+
+aside {
+    width: 260px;
+    background: var(--white);
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 20px;
+}
+
+.logo-area {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logotipo {
+    width: 120px;
+    height: auto;
+}
+
+nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item {
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: 0.3s;
+}
+
+.nav-item.active {
+    background: var(--soft-purple);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.nav-sair {
+    margin-top: auto;
+    padding: 15px;
+    cursor: pointer;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logosair { width: 20px; }
+
+main {
+    flex: 1;
+    overflow-y: auto;
+}
+
+header {
+    background: var(--primary-gradient);
+    padding: 25px 40px;
+    color: white;
+}
+
+.content-wrapper {
+    padding: 40px;
+}
+
+.page-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.5fr;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.filter-input {
+    background: var(--white);
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    color: var(--text-light);
+}
+
+.table-container {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.main-table { width: 100%; border-collapse: collapse; }
+.main-table th { padding: 15px; text-align: left; color: var(--accent); border-bottom: 1px solid #f1f5f9; }
+.main-table td { padding: 15px; border-bottom: 1px solid #f8fafc; }
+
+.avatar { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+.avatar.blue { background: #eef2ff; color: #4f46e5; }
+.avatar.pink { background: #fdf2f8; color: #db2777; }
+
+.badge { background: var(--soft-purple); color: var(--accent); padding: 4px 10px; border-radius: 20px; font-size: 11px; margin-right: 5px; }
+
+.action-buttons { display: flex; gap: 5px; }
+.btn-icon { width: 32px; height: 32px; border-radius: 8px; border: none; cursor: pointer; }
+.edit { background: #f1f0ff; color: #4f46e5; }
+.view { background: #eff6ff; color: #2563eb; }
+.delete { background: #fee2e2; color: #ef4444; }
+
+.filter-input {
+    width: 100%;
+    outline: none;
+    border: 1px solid #e2e8f0;
+    transition: 0.2s;
+}
+
+.filter-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--soft-purple);
+}
+
+.report-card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.report-card p {
+    margin-bottom: 10px;
+    color: var(--text-light);
+}
+.report-card strong {
+    font-size: 28px;
+    color: var(--accent);
+}
+
+.secao {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.notification-list {
+    display: grid;
+    gap: 16px;
+}
+
+.notification-card {
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.notification-card-title {
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 8px;
+}
+
+.notification-card-message {
+    color: var(--text-light);
+    margin-bottom: 10px;
+}
+
+.notification-card-time {
+    font-size: 13px;
+    color: #94a3b8;
+}

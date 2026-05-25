@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AcadWeb - Gestão</title>
+    <link rel="stylesheet" href="adm.css">
+</head>
+<body>
+
+    <aside>
+        <div class="logo-area">
+            <img src="logo.png" class="logotipo" alt="Logo">
+        </div>
+        <nav>
+            <div class="nav-item" onclick="mostrarSecao('usuarios')">Gerenciar Usuários</div>
+            <div class="nav-item" onclick="mostrarSecao('cursos')">Gerenciar Cursos</div>
+            <div class="nav-item" onclick="mostrarSecao('coordenadores')">Gerenciar Coordenadores</div>
+            <div class="nav-item" onclick="mostrarSecao('regras')">Regras de Atividade</div>
+            <div class="nav-item" onclick="mostrarSecao('relatorios')">Relatórios</div>
+            <div class="nav-item" onclick="mostrarSecao('notificacoes')">Notificações</div>
+            <div class="nav-sair" onclick="window.location.href='/logout'">
+                <img src="sair.png" class="logosair" alt="Sair"> Sair
+            </div>
+        </nav>
+    </aside>
+
+    <main>
+        <header>
+            <div class="header-content">
+                <h1>Painel Administrativo AcadWeb</h1>
+            </div>
+        </header>
+
+        <!-- SEÇÃO DE USUÁRIOS -->
+        <section id="usuarios" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Gerenciar Usuários</h1>
+                <div class="filters-grid" style="grid-template-columns: 1fr 0.6fr 0.4fr;">
+                    <input type="text" id="buscaUsuario" placeholder="Buscar por nome, email ou curso" class="filter-input" oninput="buscarUsuarios()">
+                    <button class="btn-primary" onclick="limparBuscaUsuarios()">Limpar</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Tipo</th>
+                            <th>Curso</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaUsuarios">
+                        <!-- JS preencherá aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE RELATÓRIOS -->
+        <section id="relatorios" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Relatórios</h1>
+            </div>
+
+            <div class="filters-grid" style="grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 25px;">
+                <div class="report-card">
+                    <p>Total de Alunos</p>
+                    <strong id="totalAlunos">0</strong>
+                </div>
+                <div class="report-card">
+                    <p>Total de Coordenadores</p>
+                    <strong id="totalCoordenadores">0</strong>
+                </div>
+                <div class="report-card">
+                    <p>Total de Cursos</p>
+                    <strong id="totalCursos">0</strong>
+                </div>
+                <div class="report-card">
+                    <p>Total de Atividades</p>
+                    <strong id="totalAtividades">0</strong>
+                </div>
+            </div>
+
+            <div class="page-title-row" style="margin-top: 20px;">
+                <h2>Visão por curso</h2>
+            </div>
+
+            <div class="filters-grid" style="grid-template-columns: 1fr 0.3fr; gap: 15px; margin-bottom: 20px;">
+                <select id="cursoRelatorio" class="filter-input" onchange="carregarRelatorios()">
+                    <option value="">Selecione o Curso...</option>
+                </select>
+                <button class="btn-primary" onclick="carregarRelatorios()">Atualizar</button>
+            </div>
+
+            <div class="filters-grid" style="grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 25px;">
+                <div class="report-card">
+                    <p>Alunos no curso</p>
+                    <strong id="cursoAlunos">-</strong>
+                </div>
+                <div class="report-card">
+                    <p>Atividades enviadas</p>
+                    <strong id="cursoAtividades">-</strong>
+                </div>
+                <div class="report-card">
+                    <p>Aprovadas</p>
+                    <strong id="cursoAprovadas">-</strong>
+                </div>
+                <div class="report-card">
+                    <p>Reprovadas</p>
+                    <strong id="cursoReprovadas">-</strong>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="page-title-row">
+                    <h2>Progresso dos Alunos</h2>
+                </div>
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Horas</th>
+                            <th>Meta</th>
+                            <th>Progresso</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaProgresso">
+                        <tr><td colspan="4">Selecione um curso para ver o progresso dos alunos.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE COORDENADORES -->
+        <section id="coordenadores" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Gerenciar Coordenadores</h1>
+                <button class="btn-primary" onclick="mostrarFormCoord()">+ Cadastrar Novo Coordenador</button>
+            </div>
+
+            <div id="formCoord" style="display:none; background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+                <div class="filters-grid" style="grid-template-columns: 1fr 1fr 1fr 1fr 0.5fr;">
+                    <input type="text" id="nomeCoord" placeholder="Nome" class="filter-input">
+                    <input type="email" id="emailCoord" placeholder="E-mail" class="filter-input">
+                    <input type="password" id="senhaCoord" placeholder="Senha" class="filter-input">
+                    
+                    <select id="cursoCoord" class="filter-input">
+                        <option value="">Selecione o Curso...</option>
+                    </select>
+
+                    <button class="btn-primary" onclick="cadastrarCoord()">Salvar</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Curso</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaCoords">
+                        <!-- JS preencherá aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE CURSOS -->
+        <section id="cursos" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Gerenciar Cursos</h1>
+                <button class="btn-primary" onclick="mostrarFormulario()">+ Cadastrar Novo Curso</button>
+            </div>
+
+            <div id="formContainer" style="display:none; background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+                <div class="filters-grid" style="grid-template-columns: 1fr 1fr 0.5fr;">
+                    <input type="text" id="nomeCurso" placeholder="Nome do Curso" class="filter-input">
+                    <input type="number" id="cargaCurso" placeholder="Carga Horária" class="filter-input">
+                    <button class="btn-primary" onclick="cadastrarCurso()">Salvar</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Curso</th>
+                            <th>Carga Horária</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaCursos">
+                        <!-- JS preencherá aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE REGRAS DE ATIVIDADE -->
+        <section id="regras" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Regras de Atividade</h1>
+                <button class="btn-primary" onclick="mostrarFormRegra()">+ Nova Regra</button>
+            </div>
+
+            <div id="formRegra" style="display:none; background: white; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+                <div class="filters-grid" style="grid-template-columns: 1fr 1fr 1fr 0.5fr;">
+                    <select id="cursoRegra" class="filter-input">
+                        <option value="">Selecione o Curso...</option>
+                    </select>
+                    <input type="text" id="categoriaRegra" placeholder="Categoria (ex: Palestras)" class="filter-input">
+                    <input type="number" id="cargaRegra" placeholder="Carga Horária" class="filter-input">
+                    <button class="btn-primary" onclick="cadastrarRegra()">Salvar</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="main-table">
+                    <thead>
+                        <tr>
+                            <th>Curso</th>
+                            <th>Categoria</th>
+                            <th>Carga Horária Máxima</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaRegras">
+                        <!-- JS preencherá aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE NOTIFICAÇÕES -->
+        <section id="notificacoes" class="secao content-wrapper" style="display:none;">
+            <div class="page-title-row">
+                <h1>Notificações</h1>
+            </div>
+            <div class="white-card">
+                <div id="listaNotificacoesAdmin" class="notification-list"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

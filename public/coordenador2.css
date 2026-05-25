@@ -1,0 +1,399 @@
+/* RESET */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* BODY */
+
+body {
+  display: flex;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+/* BOTÃO MENU MOBILE */
+
+.menu-toggle {
+
+  display: none;
+
+  position: fixed;
+
+  top: 8px;
+
+  left: 8px;
+
+  width: 42px;
+
+  height: 42px;
+
+  background: #0a0a3c;
+
+  color: white;
+
+  border: none;
+
+  border-radius: 6px;
+
+  font-size: 22px;
+
+  cursor: pointer;
+
+  z-index: 1001;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+/* SIDEBAR */
+
+.sidebar {
+
+  width: 230px;
+
+  background:
+  linear-gradient(to bottom,
+  #f2f2f2,
+  #dadada);
+
+  border-right: 6px solid #0a0a3c;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 10px 12px;
+
+  transition: 0.3s;
+
+}
+
+/* LOGO */
+
+.logo {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.logo img {
+  width: 160px;
+  max-width: 100%;
+}
+
+/* MENU */
+
+.menu {
+  list-style: none;
+  font-size: 13px;
+}
+
+.menu li {
+
+  padding: 9px 10px;
+
+  margin: 3px 0;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  color: #2b2b2b;
+
+  cursor: pointer;
+
+  border-radius: 3px;
+
+}
+
+.menu li:hover {
+  background: #cfcfcf;
+}
+
+/* MAIN */
+
+.main {
+
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+/* TOPBAR */
+
+.topbar {
+
+  height: 28px;
+
+  background: #dcdcdc;
+
+  border-bottom: 1px solid #bcbcbc;
+
+}
+
+/* HEADER */
+
+.header {
+
+  background: #0a0a3c;
+
+  color: #ffffff;
+
+  padding: 14px 20px;
+
+  padding-left: 60px; /* espaço pro botão ☰ */
+
+  font-size: 18px;
+
+  font-weight: 500;
+
+  border-bottom: 3px solid #3f5bd8;
+
+}
+
+/* CONTENT */
+
+.content {
+
+  flex: 1;
+
+  margin: 8px;
+
+  background: #ffffff;
+
+  border: 1px solid #c9c9c9;
+
+  overflow-x: auto;
+
+}
+
+/* PERFIL */
+
+.perfil {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: auto; /* empurra para baixo */
+
+}
+
+.perfil img {
+
+  width: 35px;
+
+  height: 35px;
+
+  border-radius: 50%;
+
+}
+
+.perfil span {
+  font-weight: bold;
+}
+
+/* FOOTER */
+
+.footer {
+
+  font-size: 10.5px;
+
+  color: #666;
+
+  padding: 6px 10px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  border-top: 1px solid #d0d0d0;
+
+}
+
+/* FORM ALUNO */
+
+#formAluno {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-bottom: 15px;
+
+  flex-wrap: wrap;
+
+}
+
+#formAluno input {
+
+  padding: 6px 10px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 4px;
+
+  font-size: 14px;
+
+  width: 200px;
+
+}
+
+#formAluno button.btn-add {
+
+  padding: 6px 12px;
+
+  background-color: #3f5bd8;
+
+  color: #fff;
+
+  border: none;
+
+  border-radius: 4px;
+
+  cursor: pointer;
+
+}
+
+#formAluno button.btn-add:hover {
+
+  background-color: #2d46b2;
+
+}
+
+/* TABELA */
+
+.table-wrapper {
+
+  overflow-x: auto;
+
+}
+
+.tabela-cursos {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+}
+
+.tabela-cursos th,
+.tabela-cursos td {
+
+  padding: 8px 12px;
+
+  text-align: left;
+
+  border-bottom: 1px solid #ccc;
+
+}
+
+.tabela-cursos th {
+
+  background-color: #f2f2f2;
+
+}
+
+/* BOTÃO */
+
+.btn-add {
+
+  padding: 8px 14px;
+
+  background-color: #3f5bd8;
+
+  color: #fff;
+
+  border: none;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+}
+
+.btn-add:hover {
+
+  background-color: #2d46b2;
+
+}
+
+/* ======================= */
+/* 📱 RESPONSIVO */
+/* ======================= */
+
+@media (max-width: 768px) {
+
+/* Mostrar botão */
+
+.menu-toggle {
+  display: flex;
+}
+
+/* Sidebar escondida */
+
+.sidebar {
+
+  position: fixed;
+
+  left: -230px;
+
+  top: 0;
+
+  height: 100%;
+
+  z-index: 999;
+
+}
+
+/* Sidebar aberta */
+
+.sidebar.active {
+  left: 0;
+}
+
+/* Inputs ocupam largura */
+
+#formAluno input {
+  width: 100%;
+}
+
+/* Botões largura total */
+
+.btn-add {
+  width: 100%;
+}
+
+/* Header menor */
+
+.header {
+  font-size: 16px;
+}
+
+/* Footer */
+
+.footer {
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  text-align: center;
+
+}
+
+}

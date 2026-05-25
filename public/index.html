@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+
+<!-- ESSENCIAL PARA CELULAR 📱 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login - TechNova</title>
+
+<!-- CSS DEVE FICAR AQUI -->
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="login-box">
+
+<!-- LOGO -->
+
+<img
+src="logo.png"
+alt="logo"
+class="logo">
+
+<p>
+Entre para iniciar sua sessão
+</p>
+
+<!-- FORMULÁRIO -->
+
+<form action="/login" method="POST">
+
+<input
+  type="email"
+  name="email"
+  placeholder="Email"
+  required
+>
+
+<input
+  type="password"
+  name="password"
+  placeholder="Senha"
+  required
+>
+
+<button type="submit">
+Entrar
+</button>
+
+</form>
+
+<div id="loginError" class="login-error" style="display:none; margin-top:16px; color:#e11d48; text-align:center;"></div>
+
+<a href="#">
+Esqueceu sua senha?
+</a>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const error = params.get('error');
+const loginError = document.getElementById('loginError');
+if (error) {
+  let message = 'Erro ao fazer login. Verifique email e senha.';
+  if (error === 'role_invalido') {
+    message = 'Seu usuário não possui permissão para acessar esta área.';
+  }
+  loginError.textContent = message;
+  loginError.style.display = 'block';
+}
+</script>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

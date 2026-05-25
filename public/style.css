@@ -1,0 +1,121 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fundo da página */
+body {
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    font-family: Arial, sans-serif;
+
+    background: linear-gradient(135deg, #0f2027, #2c5364, #6a11cb);
+}
+
+/* Container */
+.container {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Caixa login */
+.login-box {
+
+    width: 100%;
+    max-width: 350px;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 20px;
+
+    text-align: center;
+
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+/* Logo */
+.logo {
+
+    width: 100%;
+    max-width: 120px;
+
+    height: auto;
+
+    margin-bottom: 15px;
+}
+
+/* Título */
+.login-box h2 {
+    margin-bottom: 10px;
+}
+
+/* Texto */
+.login-box p {
+    margin-bottom: 15px;
+}
+
+/* Inputs */
+input,
+select,
+button {
+
+    width: 100%;
+
+    padding: 12px;
+
+    margin-bottom: 12px;
+
+    border-radius: 10px;
+
+    border: 1px solid #ccc;
+
+    font-size: 14px;
+}
+
+/* Botão */
+button {
+
+    background: #6a11cb;
+
+    color: white;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+button:hover {
+    background: #4e0ca3;
+}
+
+/* 📱 Responsividade celular */
+@media (max-width: 480px) {
+
+    .login-box {
+        padding: 25px;
+        border-radius: 18px;
+    }
+
+    input,
+    select,
+    button {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+}
